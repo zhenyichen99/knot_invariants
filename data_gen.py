@@ -228,7 +228,6 @@ def calc_adj_torsion_poly(path, save_int=1000):
 				p = mfld.high_precision().hyperbolic_adjoint_torsion()
 			except:
 				failed += 1
-				# print(code + ' failed')
 				continue
 		df.loc[i,'adj_torsion_poly_degree'] = p.degree()
 		z = p.constant_coefficient()
@@ -250,12 +249,4 @@ def extract_jones_const(from_path, to_path):
 
 	to_df['jones_const'] = [ast.literal_eval(d).get(0,0) for d in from_df['jones_poly']]
 	to_df.astype({'jones_const': 'Int64'}).to_csv(to_path, index=False)
-
-
-# calc_knot_inv('invariants/3-16_hyp_signature.csv', signature, 'signature', prog_int=1000, save_int=10000)
-# calc_inv_hp('invariants/3-12_hyp_invariants.csv', chern_simons, 'chern_simons')
-# calc_cusp_translations('invariants/3-16_hyp_snappy_dt.csv')
-# calc_systole('invariants/3-16_hyp_systole.csv')
-# calc_torsion_poly('invariants/3-16_hyp_invariants.csv')
-# extract_jones_const('invariants/3-16_hyp_jones_poly.csv', 'invariants/3-16_hyp_jones_const.csv')
 
