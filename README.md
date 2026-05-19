@@ -7,8 +7,11 @@ In the repository, you will find the datasets of knot invariants and the scripts
 
 ## Files
 `Regina.zip` contains data from the Regina census, converted to SnapPy readable DT code
+
 `invariants.zip` contains the raw datasets of knot invariants, as well as the preprocessed datasets ready for experiments
+
 `data_gen.py` is the main script used to generate the invariants
+
 `data_util.py` contains various utilities for data preprocessing and sampling 
 
 ## Data Generation
