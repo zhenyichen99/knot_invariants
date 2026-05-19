@@ -121,15 +121,6 @@ def split_data(path, p_train=90, p_val=5, p_test=5):
 	df_test = df.iloc[n_val:n_val+n_test]
 	df_train = df.iloc[n_val+n_test:]
 
-	# for i in range(l):
-	# 	r = i % 100
-	# 	if r < p_train:
-	# 		df_train.loc[len(df_train)] = df.loc[i]
-	# 	elif r < p_train + p_val:
-	# 		df_val.loc[len(df_val)] = df.loc[i]
-	# 	else:
-	# 		df_test.loc[len(df_test)] = df.loc[i]
-
 	prepath = path[:-4]
 	df_train.to_csv(f'{prepath}_train.csv', index=False)
 	df_val.to_csv(f'{prepath}_val.csv', index=False)
@@ -165,18 +156,3 @@ def random_batches(n_batches, data, batch_size, device='cpu'):
 
 	return batches
 
-
-# transfer_data('invariants/3-16_invariants/3-16_hyp_jones_const.csv', 'invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv', ['jones_const'], index_col='snappy_dt_code')
-# change_col_type('invariants/3-12_hyp_torsion_poly.csv', 'adj_torsion_poly_degree', 'Int64')
-# normalize('invariants/3-16_hyp_clean_1.csv')
-# count_missing_values('invariants/3-16_hyp_invariants_all.csv')
-# find_range('invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv', 'jones_const')
-# shift_by_min('invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv', 'jones_const')
-# find_range('invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv', 'jones_const')
-# count_values('invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv', 'jones_const')
-# split_data('invariants/jones_exp_2/3-16_hyp_jones_exp_2.csv') 
-# val_data = pd.read_csv('invariants/3-16_hyp_ready_val.csv').select_dtypes('number')
-# print(random_batch(val_data, batch_size=32))
-# drop_nan('invariants/jones_exp_2/3-16_hyp_clean_2.csv')
-# normalize('invariants/jones_exp_2/3-16_hyp_clean_2.csv')
-info('invariants/3-12_invariants/3-12_hyp_invariants.csv')
