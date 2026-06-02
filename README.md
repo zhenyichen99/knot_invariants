@@ -38,12 +38,13 @@ The target invariants are of a more algebraic nature. So far, I have experimente
 ## Data Preprocessing
 Some entries of the Chern-Simons invariant are very small (<1e-10), which shouldn't happen and suggests the true values are zero, so we set them to zero.
 
-The next step is dropping all knots with a missing invariant (due to calculation failure). Since the hyperbolic torsion polynomial failed significantly more often than the other invariants, I made two input datasets, one with and one without the hyperbolic torsion.
+The next step is dropping all knots with a missing invariant (due to calculation failure). Since the hyperbolic torsion polynomial failed significantly more often than the other invariants, I made three input datasets, tabulated below.
 
 | dataset | input features |
 |--|--|
 | input set 1 | volume, Chern-Simons, cusp area, and cusp translations |
 | input set 2 | input set 1 + hyperbolic torsion |
+| input set 3 | hyperbolic torsion |
 
 All input features are then normalized by subtracting the mean and dividing by the variance. The input data are then paired with the target invariants according to the knots' DT code.
 
@@ -80,5 +81,35 @@ This experiment repeats the above but uses input set 2 instead. The MLPs perform
 | depth-3 width-2048 MLP | 17-21 |
 | depth-3 width-4096 MLP | 17-21 |
 
+## Experiment 2: Alexander constant
+### Experiment 2.1
+This experiment trains a depth-3 width-400 MLP to predict the constant term of the Alexander polynomial from input set 1. The model performed worse than the baseline, suggesting the lack of a statistical connection.
 
+| classifier | test accuracy (%) |
+|--|--|
+| ZeroR | 40.3 |
+| depth-3 width-2048 MLP | 35-39 |
 
+### Experiment 2.2
+This experiment repeats the above with input set 2. The model performed significantly better than the baseline, which gives us confidence that the Alexander constant is indeed related to the hyperbolic invariants. Adding dropout layers at a rate of 0.2 improved the accuracy slightly.
+
+| classifier | test accuracy (%) |
+|--|--|
+| ZeroR | 40.1 |
+| depth-3 width-2048 MLP | 80-82 |
+| MLP with 0.2 dropout rate | 81-83 |
+
+### Experiment 2.3
+In light of the performance difference between experiments 2.1 and 2.2, it's very natural to suspect that the hyperbolic torsion polynomial alone should be enough to replicate the results of experiment 2.2, since the other invariants don't seem to help at all. Indeed, running the experiment again with input set 3 did give similar results:
+
+| classifier | test accuracy (%) |
+|--|--|
+| ZeroR | 40.1 |
+| depth-3 width-2048 MLP | 80-82 |
+| MLP with 0.2 dropout rate | 80-82 |
+
+### Conclusion
+Experiment 2 tells us the hyperbolic invariants are able to predict the Alexander constant to a reasonable accuracy. Moreover, the most salient feature is the hyperbolic torsion polynomial. 
+
+### Next Steps
+I plan on using attribution techiques to probe the learned model from experiment 2.3. The goal is to extract a formula or inequality expressing the Alexander constant in terms of the coefficients of the hyperbolic torsion polynomial. 
