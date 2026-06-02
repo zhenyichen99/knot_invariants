@@ -16,6 +16,16 @@ def transfer_data(from_path, to_path, col_names, index_col=None):
 	to_df.to_csv(to_path, index=(index_col!=None))
 	print('transfer complete')
 
+def extract_cols(from_path, to_path, col_names):
+	# extract the columns in the list col_names and store in to_path
+
+	from_df = pd.read_csv(from_path)
+	to_df = from_df[col_names]
+	print('columns extracted...', flush=True)
+
+	to_df.to_csv(to_path, index=False)
+	print('data saved', flush=True)
+
 def change_col_type(path, col_name, dtype):
 	df = pd.read_csv(path)
 	df = df.astype({col_name: dtype})
@@ -120,14 +130,25 @@ def split_data(path, p_train=90, p_val=5, p_test=5):
 	df_val = df.iloc[:n_val]
 	df_test = df.iloc[n_val:n_val+n_test]
 	df_train = df.iloc[n_val+n_test:]
+	print('dataframes created...', flush=True)
+	# for i in range(l):
+	# 	r = i % 100
+	# 	if r < p_train:
+	# 		df_train.loc[len(df_train)] = df.loc[i]
+	# 	elif r < p_train + p_val:
+	# 		df_val.loc[len(df_val)] = df.loc[i]
+	# 	else:
+	# 		df_test.loc[len(df_test)] = df.loc[i]
 
 	prepath = path[:-4]
 	df_train.to_csv(f'{prepath}_train.csv', index=False)
+	print('train data saved...', flush=True)
 	df_val.to_csv(f'{prepath}_val.csv', index=False)
+	print('val data saved...', flush=True)
 	df_test.to_csv(f'{prepath}_test.csv', index=False)
-	print('split complete')
+	print('test data saved...\nsplit complete', flush=True)
 
-def random_batch(df, batch_size, device='cpu', target_col='jones_const', fix_seed=False):
+def random_batch(df, batch_size, target_col, device='cpu', fix_seed=False):
 	'''
 	df: pd.DataFrame
 	batch_size: int
@@ -147,12 +168,15 @@ def random_batch(df, batch_size, device='cpu', target_col='jones_const', fix_see
 
 	return inputs, targets
 
-def random_batches(n_batches, data, batch_size, device='cpu'):
-	# generate a length=n_batches list of random batches 
+def random_batches(n_batches, data, batch_size, target_col, device='cpu', fix_seed=False):
+	# generate a length = n_batches list of random batches 
+
+	if fix_seed:
+		np.random.seed(0)
 
 	batches = []
 	for _ in range(n_batches):
-		batches.append(random_batch(data, batch_size, device))
+		batches.append(random_batch(data, batch_size, target_col=target_col, device=device))
 
 	return batches
 

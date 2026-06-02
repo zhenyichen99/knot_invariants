@@ -101,6 +101,10 @@ def jones_poly(knot):
 	# return the Jones polynomial of knot as a dictionary
 	return str(knot.jones_polynomial().dict())
 
+def alexander_poly(knot):
+	# return the Jones polynomial of knot as a dictionary
+	return str(knot.alexander_polynomial().dict())
+
 def calc_cusp_translations(path, save_int=2000):
 	# calculate the longitudinal and (real and imaginary) meridional translations
 	# of the cusp, and store in three columns of the csv file (path)
@@ -147,6 +151,8 @@ def calc_systole(path, prog_int=100, save_int=500):
 		df['systole_torsion'] = [pd.NA for _ in range(l)]
 	failed = 0
 	for i, code in enumerate(df['snappy_dt_code']):
+		if i < 179500:
+			continue
 		mfld = sp.Link(code).exterior()
 		try:
 			systole = mfld.length_spectrum_alt(count=1)[0].length
@@ -228,6 +234,7 @@ def calc_adj_torsion_poly(path, save_int=1000):
 				p = mfld.high_precision().hyperbolic_adjoint_torsion()
 			except:
 				failed += 1
+				# print(code + ' failed')
 				continue
 		df.loc[i,'adj_torsion_poly_degree'] = p.degree()
 		z = p.constant_coefficient()
@@ -243,10 +250,15 @@ def calc_adj_torsion_poly(path, save_int=1000):
 	df.to_csv(path, index=False)
 	print('done and saved')
 
-def extract_jones_const(from_path, to_path):
+def extract_poly_const(from_path, to_path, poly_col, const_col):
+	# extract the constant term of poly_col in from_path and store in const_col in to_path
+
 	from_df = pd.read_csv(from_path)
 	to_df = pd.read_csv(to_path)
 
-	to_df['jones_const'] = [ast.literal_eval(d).get(0,0) for d in from_df['jones_poly']]
-	to_df.astype({'jones_const': 'Int64'}).to_csv(to_path, index=False)
+	to_df[const_col] = [ast.literal_eval(d).get(0,0) for d in from_df[poly_col]]
+	print('constant terms extracted...', flush=True)
+
+	to_df.astype({const_col: 'Int64'}).to_csv(to_path, index=False)
+	print('done and saved', flush=True)
 
