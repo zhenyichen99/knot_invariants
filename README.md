@@ -14,6 +14,12 @@ In the repository, you will find the datasets of knot invariants and the scripts
 
 `data_util.py` contains various utilities for data preprocessing and sampling 
 
+`model.py` defines a simple MLP and a dropout variant
+
+`train_test.py` defines the train and test loops
+
+`run.py` loads the data and trains the model
+
 ## Data Generation
 The starting point of our datasets is the [Regina census](https://regina-normal.github.io/data.html), which tabulates all prime knots up to 19 crossings. For this project, I generated invariants for all hyperbolic knots up to 16 corssings, of which there are about 1.7 millions. 
 
